@@ -1,0 +1,14 @@
+#!/bin/bash
+echo "Checking /log"
+x=20
+current=$(df /dev/sda4 | grep /dev/sda4 | awk '{ print $5}'| sed 's/%//g')
+if [ "$current" -gt "$x" ]
+then
+echo "It is greater than $x"
+cd /mnt/backup
+tar -czvf backup_log.tar.gz /mnt/log
+rm -rf /mnt/log/*
+else
+echo "It is lower than $x"
+fi
+echo "Ended"
