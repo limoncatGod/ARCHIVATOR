@@ -3,7 +3,7 @@ echo "Checking existence of /log and /backup"
 if [ ! -d "/mnt/log" ] || [ ! -d "/mnt/backup" ]; then
 echo "Some directory doesn't exist!"
 else
-limit_value=0
+limit_value=70
 current=$(df /dev/sda4 | grep /dev/sda4 | awk '{ print $5}'| sed 's/%//g')
 if [ "$current" -gt "$limit_value" ]; then
 echo "Percentage of fullness is greater than $limit_value"
