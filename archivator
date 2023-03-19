@@ -24,7 +24,7 @@ echo "No files in $1"
 else
 gzip  "$2/backup_log.tar"
 if [ "$num_of_files" -lt "$limit_files" ]; then
-echo "Numbers of files lower than $limit_fles, but percentage of fulness is greater than limit value"
+echo "Numbers of files lower than $limit_files, but percentage of fulness is greater than limit value"
 fi
 echo "Archive successfully created!"
 fi
