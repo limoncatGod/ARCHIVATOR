@@ -1,14 +1,31 @@
 #!/bin/bash
-echo "Checking /log"
-x=20
-current=$(df /dev/sda4 | grep /dev/sda4 | awk '{ print $5}'| sed 's/%//g')
-if [ "$current" -gt "$x" ]
-then
-echo "It is greater than $x"
-cd /mnt/backup
-tar -czvf backup_log.tar.gz /mnt/log
-rm -rf /mnt/log/*
+echo "Checking existence of /log and /backup"
+if [ ! -d "/mnt/log" ] || [ ! -d "/mnt/backup" ]; then
+echo "Some directory doesn't exist!"
 else
-echo "It is lower than $x"
+limit_value=0
+current=$(df /dev/sda4 | grep /dev/sda4 | awk '{ print $5}'| sed 's/%//g')
+if [ "$current" -gt "$limit_value" ]; then
+echo "Percentage of fullness is greater than $limit_value"
+num_of_files=0
+limit_files=10
+cd /mnt/log
+IFS=$'\n'
+for file in $(ls -t); do
+if [ "$num_of_files" -gt $(( $limit_files - 1 )) ]; then
+tar -rf /mnt/backup/backup_log.tar "$file"
+rm "$file"
+fi
+num_of_files=$(( $num_of_files + 1 ))
+done
+gzip  /mnt/backup/backup_log.tar
+if [ "$num_of_files" -lt "$limit_files" ] && [ "$num_of_files" -gt 0 ]; then
+echo "Numbers of files lower than 10, but percentage of fulness is greater than limit value"
+tar -czvf /mnt/backup/backup_log.tar.gz /mnt/log/*
+rm -rf /mnt/log/*
+fi
+else
+echo "Percentage of fullness is lower than $limit_value"
 fi
 echo "Ended"
+fi
