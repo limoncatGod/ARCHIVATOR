@@ -19,15 +19,11 @@ rm "$file"
 fi
 num_of_files=$(( $num_of_files + 1 ))
 done
-if [ "$num_of_files" -eq 0 ]; then
-echo "No files in $1"
-else
 gzip  "$2/backup_log.tar"
 if [ "$num_of_files" -lt "$limit_files" ]; then
 echo "Numbers of files lower than $limit_files, but percentage of fulness is greater than limit value"
 fi
 echo "Archive successfully created!"
-fi
 else
 echo "Percentage of fullness is lower than $limit_value"
 fi
